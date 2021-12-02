@@ -1,0 +1,73 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Exame {
+  id: ID!
+  nome: String!
+  pacienteId: ID!
+  paciente: Paciente!
+}
+
+type Hospital {
+  id: ID!
+  nome: String!
+  cidade: String!
+  estado: String!
+  leitos: [Leito!]!
+}
+
+type Leito {
+  id: ID!
+  descricao: String!
+  hospitalId: ID!
+  ocupado: Boolean!
+  hospital: Hospital!
+  internacoes: [Internacao!]!
+}
+
+type Internacao {
+  id: ID!
+  pacienteId: ID!
+  leitoId: ID!
+  paciente: Paciente!
+  leito: Leito!
+}
+
+type Paciente {
+  id: ID!
+  nome: String!
+  nascimento: DateTime!
+  sexo: SexoRole!
+  internacoes: [Internacao!]!
+  exames: [Exame!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""The supported options"""
+enum SexoRole {
+  MASCULINO
+  FEMININO
+  OUTRO
+}
+
+type Query {
+  getPacientes: [Paciente!]!
+  getPaciente(id: Float!): Paciente!
+}
+
+type Mutation {
+  createPaciente(data: PacienteInput!): Paciente!
+  updatePaciente(data: PacienteInput!, id: Float!): Paciente!
+  deletePaciente(id: Float!): Boolean!
+}
+
+input PacienteInput {
+  nome: String!
+  nascimento: DateTime!
+  sexo: String!
+}

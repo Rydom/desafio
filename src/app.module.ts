@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { RepoModule } from './repo/repo.module';
 import { GQLImportsModule } from './graphql/graphq-imports.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { sexoRoleResolver } from './graphql/paciente/sexo-role.resolver';
 
 
 @Module({
@@ -18,6 +19,9 @@ import { GraphQLModule } from '@nestjs/graphql';
         debug: false,
         playground: true,
         installSubscriptionHandlers: true,
+        resolvers: {
+          SexoRole: sexoRoleResolver
+        }
       })
     ],
   controllers: [AppController],
