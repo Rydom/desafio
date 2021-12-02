@@ -1,13 +1,16 @@
 
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { BaseEntity } from "./base/base.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Leito from "./leito.entity";
 import Paciente from "./paciente.entity";
 
 @ObjectType()
 @Entity({ name: 'internacoes'})
-export default class Internacao extends BaseEntity {
+export default class Internacao {
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
+  id: number
+
   @Field(() => ID)
   @Column({ name: 'paciente_id' })
   pacienteId: number
@@ -21,7 +24,7 @@ export default class Internacao extends BaseEntity {
   @JoinColumn({ name: 'paciente_id' })
   paciente: Promise<Paciente>
 
-  @Field()
+  @Field(() => Leito)
   @ManyToOne(() => Leito, leito => leito.internacoes)
   @JoinColumn({ name: 'leito_id' })
   leito: Promise<Leito>

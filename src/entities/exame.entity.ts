@@ -1,14 +1,15 @@
 
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { BaseEntity } from "./base/base.entity";
-import Hospital from "./hospital.entity";
-import Internacao from "./internacao.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Paciente from "./paciente.entity";
 
 @ObjectType()
 @Entity({ name: 'exames'})
-export default class Exame extends BaseEntity {
+export default class Exame {
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
+  id: number
+
   @Field()
   @Column()
   nome: string;

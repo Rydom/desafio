@@ -1,42 +1,49 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, OneToMany } from "typeorm";
-import { BaseEntity } from "./base/base.entity";
-import Exame from "./exame.entity";
-import Internacao from "./internacao.entity";
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import Exame from './exame.entity';
+import Internacao from './internacao.entity';
 
 export enum SexoRole {
-  Masculino = "M",
-  Feminino = "F",
-  Outro = "O"
+  MASCULINO='MASCULINO',
+  FEMININO='FEMININO',
+  OUTRO='OUTRO'
 }
+registerEnumType(SexoRole, {
+  name: 'SexoRole',
+  description: 'The supported options'
+})
 
 @ObjectType()
-@Entity({ name: 'pacientes'})
-export default class Paciente extends BaseEntity {
-  @Field()
-  @Column()
-  nome: string
+@Entity({ name: 'pacientes' })
+export default class Paciente {
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
+  id: number
 
   @Field()
   @Column()
-  nascimento: Date
+  nome: string;
 
   @Field()
+  @Column()
+  nascimento: Date;
+
+  @Field(() => SexoRole)
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: SexoRole
   })
-  sexo: string
+  sexo: SexoRole;
 
   @Field(() => [Internacao])
-  @OneToMany(() => Internacao, internacao => internacao.paciente, {
+  @OneToMany(() => Internacao, (internacao) => internacao.paciente, {
     cascade: true,
   })
-  internacoes: Promise<Internacao[]>
-  
+  internacoes: Promise<Internacao[]>;
+
   // associations
   @Field(() => [Exame])
-  @OneToMany(() => Exame, exame => exame.paciente, {
+  @OneToMany(() => Exame, (exame) => exame.paciente, {
     cascade: true,
   })
   exames: Promise<Exame[]>;
