@@ -1,13 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import Paciente from '../entities/paciente.entity';
+import Leito from '../entities/leito.entity';
+import Hospital from '../entities/hospital.entity';
+import Internacao from '../entities/internacao.entity';
+import Exame from '../entities/exame.entity';
 
 
 @Injectable()
 class RepoService {
   public constructor(
-    // @InjectRepository(User) public readonly userRepo: Repository<User>,
-    // @InjectRepository(Post) public readonly postRepo: Repository<Post>,
+    @InjectRepository(Paciente) public readonly pacienteRepo: Repository<Paciente>,
+    @InjectRepository(Leito) public readonly leitoRepo: Repository<Leito>,
+    @InjectRepository(Hospital) public readonly hospitalRepo: Repository<Hospital>,
+    @InjectRepository(Internacao) public readonly internacaoRepo: Repository<Internacao>,
+    @InjectRepository(Exame) public readonly exameRepo: Repository<Exame>,
   ) {}
 }
 
