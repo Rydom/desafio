@@ -27,13 +27,8 @@ export default class Paciente {
   @Column()
   nascimento: Date;
 
-  @Field(() => SexoRole)
-  @Column({
-    type: 'enum',
-    enum: SexoRole,
-    // length: 9
-  })
-  sexo: SexoRole;
+  @Column({ length: 9 })
+  sexo: string;
 
   @Field()
   @Column({ length: 15 })

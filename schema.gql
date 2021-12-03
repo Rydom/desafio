@@ -21,7 +21,6 @@ type Paciente {
   id: ID!
   nome: String!
   nascimento: DateTime!
-  sexo: SexoRole!
   status: String!
   leitoId: ID!
   leito: Leito!
@@ -32,13 +31,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-"""The supported options"""
-enum SexoRole {
-  MASCULINO
-  FEMININO
-  OUTRO
-}
-
 type EventoTipo {
   id: ID!
   nome: String!
@@ -47,17 +39,29 @@ type EventoTipo {
 type Evento {
   id: ID!
   nome: String!
-  data: DateTime!
   eventoTipoId: ID!
 }
 
+type PacienteEvento {
+  id: ID!
+  pacienteId: ID!
+  paciente: Paciente!
+  eventoId: ID!
+  evento: Evento!
+  leitoId: ID!
+  created_at: DateTime!
+  leito: Leito!
+}
+
 type Query {
-  getPacientes: [Paciente!]!
+  listPacientes: [Paciente!]!
   getPaciente(id: String!): Paciente!
   listHospitais: [Hospital!]!
   getHospital(id: String!): Hospital!
   listEventoTipo: [EventoTipo!]!
   getEventoTipo(id: String!): EventoTipo!
+  listPacienteEvento: [PacienteEvento!]!
+  getPacienteEvento(id: String!): [PacienteEvento!]!
 }
 
 type Mutation {
@@ -66,13 +70,16 @@ type Mutation {
   deletePaciente(id: String!): Boolean!
   createHospital(data: HospitalInput!): Hospital!
   createLeito(data: LeitoInput!): Leito!
+  internarPaciente(data: InternacaoInput!): PacienteEvento!
   createEventoTipo(data: EventoTipoInput!): EventoTipo!
 }
 
 input PacienteInput {
   nome: String!
   nascimento: DateTime!
+  leitoId: String!
   sexo: String!
+  status: String!
 }
 
 input HospitalInput {
@@ -86,6 +93,21 @@ input LeitoInput {
   ocupado: Boolean = false
 }
 
+input InternacaoInput {
+  leitoId: String!
+  pacienteInput: PacienteInput!
+  eventoInput: EventoInput!
+}
+
+input EventoInput {
+  nome: String!
+  eventoTipoId: String!
+}
+
 input EventoTipoInput {
   nome: String!
+}
+
+type Subscription {
+  pacienteInternado: PacienteEvento!
 }

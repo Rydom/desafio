@@ -1,6 +1,6 @@
 
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Evento from "./evento.entity";
 import Leito from "./leito.entity";
 import Paciente from "./paciente.entity";
@@ -34,6 +34,10 @@ export default class PacienteEvento {
   @Column({ name: 'leito_id' })
   leitoId: string
 
+  @Field()
+  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  created_at: Date;  
+  
   @Field(() => Leito)
   @ManyToOne(() => Leito, leito => leito.id)
   @JoinColumn({ name: 'leito_id'})

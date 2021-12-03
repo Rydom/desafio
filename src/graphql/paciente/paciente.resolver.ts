@@ -13,7 +13,7 @@ export class PacienteResolver {
   ) {}
 
   @Query(() => [Paciente])
-  public async getPacientes(): Promise<Paciente[]> {
+  public async listPacientes(): Promise<Paciente[]> {
     return this.repoService.pacienteRepo.find();
   }
 

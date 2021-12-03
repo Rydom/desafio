@@ -10,5 +10,11 @@ export class PacienteInput {
   readonly nascimento: Date
 
   @Field()
-  readonly sexo: SexoRole
+  readonly leitoId: string
+
+  @Field()
+  readonly sexo: string
+
+  @Field()
+  readonly status: string
 }

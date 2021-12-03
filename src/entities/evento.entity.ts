@@ -14,9 +14,9 @@ export default class Evento {
   @Column({ length: 255 })
   nome: string
 
-  @Field()
-  @Column()
-  data: Date
+  // @Field()
+  // @Column()
+  // data: Date
  
   @Field(() => ID)
   @Column()

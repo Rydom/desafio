@@ -5,11 +5,13 @@ import Paciente from '../entities/paciente.entity';
 import Leito from '../entities/leito.entity';
 import Hospital from '../entities/hospital.entity';
 import EventoTipo from '../entities/evento-tipo.entity';
+import Evento from '../entities/evento.entity';
+import PacienteEvento from '../entities/paciente-evento.entity';
 
 @Global()
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Paciente, Leito, Hospital, EventoTipo]),
+    TypeOrmModule.forFeature([Paciente, PacienteEvento, Leito, Hospital, Evento, EventoTipo]),
   ],
   providers: [RepoService],
   exports: [RepoService],
