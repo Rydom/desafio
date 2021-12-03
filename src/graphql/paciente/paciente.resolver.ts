@@ -1,6 +1,7 @@
 import { Inject } from "@nestjs/common";
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
+import Leito from "../../entities/leito.entity";
 import Paciente from "../../entities/paciente.entity";
 import RepoService from "../../repo/repo.service";
 import { PacienteInput } from "./paciente.input";
@@ -53,5 +54,10 @@ export class PacienteResolver {
   @Mutation(() => Boolean)
   public async deletePaciente(@Args('id') id: string): Promise<boolean> {
     return !!(await this.repoService.pacienteRepo.delete(id));
+  }
+
+  @ResolveField()
+  leito(@Parent() paciente: Paciente): Promise<Leito> {
+    return this.repoService.leitoRepo.findOne(paciente.leitoId)
   }
 }
