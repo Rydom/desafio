@@ -13,15 +13,12 @@ export default class Evento {
   @Field()
   @Column({ length: 255 })
   nome: string
-
-  // @Field()
-  // @Column()
-  // data: Date
  
   @Field(() => ID)
-  @Column()
+  @Column({ name: 'evento_tipo_id'})
   eventoTipoId: string
-  
+
+  @Field(() => EventoTipo)
   @ManyToOne(() => EventoTipo, eventoTipo => eventoTipo.id)
   @JoinColumn({ name: 'evento_tipo_id'})
   eventoTipo: EventoTipo
