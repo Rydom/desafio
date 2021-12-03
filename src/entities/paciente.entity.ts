@@ -21,7 +21,7 @@ export default class Paciente {
   id: string
 
   @Field()
-  @Column()
+  @Column({ length: 255 })
   nome: string;
 
   @Field()
@@ -31,12 +31,13 @@ export default class Paciente {
   @Field(() => SexoRole)
   @Column({
     type: 'enum',
-    enum: SexoRole
+    enum: SexoRole,
+    // length: 9
   })
   sexo: SexoRole;
 
   @Field()
-  @Column()
+  @Column({ length: 15 })
   status: string;
 
   @Field(() => ID)

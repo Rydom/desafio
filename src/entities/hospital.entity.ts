@@ -11,11 +11,11 @@ export default class Hospital {
   id: string
 
   @Field()
-  @Column()
+  @Column({ length: 255 })
   nome: string;
 
   @Field()
-  @Column()
+  @Column({ length: 10 })
   cep: string;
 
   @Field(() => [Leito])

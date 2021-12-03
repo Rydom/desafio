@@ -8,10 +8,10 @@ import Hospital from "./hospital.entity";
 export default class Leito {
   @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
-  id: number
+  id: string
 
   @Field()
-  @Column()
+  @Column({ length: 255 })
   descricao: string;
   
   @Field(() => ID)

@@ -7,11 +7,11 @@ import Paciente from "./paciente.entity";
 @Entity({ name: 'exames'})
 export default class Exame {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
   @Field()
-  @Column()
+  @Column({ length: 255 })
   nome: string;
     
   @Field(() => ID)
