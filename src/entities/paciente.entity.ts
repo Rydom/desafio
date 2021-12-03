@@ -27,19 +27,24 @@ export default class Paciente {
   @Column()
   nascimento: Date;
 
+  @Field()
   @Column({ length: 9 })
   sexo: string;
+
+  @Field()
+  @Column({ length: 14 })
+  cpf: string;
 
   @Field()
   @Column({ length: 15 })
   status: string;
 
-  @Field(() => ID)
-  @Column({ name: 'leito_id '})
-  leitoId: string;
+  @Field(() => ID, { nullable: true })
+  @Column({ name: 'leito_id', nullable: true })
+  leitoId?: string;
 
-  @Field()
-  @OneToOne(() => Leito, { eager: true })
+  @Field({ nullable: true })
+  @OneToOne(() => Leito, { eager: true, nullable: true })
   @JoinColumn({ name: 'leito_id'})
-  leito: Leito;
+  leito?: Leito;
 }

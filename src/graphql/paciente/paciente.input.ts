@@ -10,6 +10,9 @@ export class PacienteInput {
   readonly nascimento: Date
 
   @Field()
+  readonly cpf: string
+
+  @Field({ nullable: true })
   readonly leitoId: string
 
   @Field()

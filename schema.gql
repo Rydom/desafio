@@ -21,9 +21,11 @@ type Paciente {
   id: ID!
   nome: String!
   nascimento: DateTime!
+  sexo: String!
+  cpf: String!
   status: String!
-  leitoId: ID!
-  leito: Leito!
+  leitoId: ID
+  leito: Leito
 }
 
 """
@@ -53,6 +55,15 @@ type PacienteEvento {
   leito: Leito!
 }
 
+type HistoricoSinaisVitais {
+  id: ID!
+  pressaoArterial: Float!
+  frequenciaRespiratoria: Float!
+  pacienteId: ID!
+  paciente: Paciente!
+  created_at: DateTime!
+}
+
 type Query {
   listPacientes: [Paciente!]!
   getPaciente(id: String!): Paciente!
@@ -70,14 +81,18 @@ type Mutation {
   deletePaciente(id: String!): Boolean!
   createHospital(data: HospitalInput!): Hospital!
   createLeito(data: LeitoInput!): Leito!
+  createEvento(data: EventoInput!): Evento!
   internarPaciente(data: InternacaoInput!): PacienteEvento!
+  coletarSinaisVitais(data: SinaisVitaisInput!): HistoricoSinaisVitais!
+  movimentarLeito: PacienteEvento!
   createEventoTipo(data: EventoTipoInput!): EventoTipo!
 }
 
 input PacienteInput {
   nome: String!
   nascimento: DateTime!
-  leitoId: String!
+  cpf: String!
+  leitoId: String
   sexo: String!
   status: String!
 }
@@ -93,15 +108,21 @@ input LeitoInput {
   ocupado: Boolean = false
 }
 
+input EventoInput {
+  nome: String!
+  eventoTipoId: String!
+}
+
 input InternacaoInput {
   leitoId: String!
   pacienteInput: PacienteInput!
   eventoInput: EventoInput!
 }
 
-input EventoInput {
-  nome: String!
-  eventoTipoId: String!
+input SinaisVitaisInput {
+  pressaoArterial: Float!
+  frequenciaRespiratoria: Float!
+  pacienteId: String!
 }
 
 input EventoTipoInput {
@@ -110,4 +131,5 @@ input EventoTipoInput {
 
 type Subscription {
   pacienteInternado: PacienteEvento!
+  coletaSinaisVitais: HistoricoSinaisVitais!
 }

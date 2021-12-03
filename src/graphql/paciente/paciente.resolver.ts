@@ -8,9 +8,7 @@ import { PacienteInput } from "./paciente.input";
 @Resolver(() => Paciente)
 export class PacienteResolver {
   constructor(
-    private readonly repoService: RepoService,
-    @Inject('PUB_SUB') private pubSub: PubSub,
-  ) {}
+    private readonly repoService: RepoService) {}
 
   @Query(() => [Paciente])
   public async listPacientes(): Promise<Paciente[]> {
@@ -24,10 +22,16 @@ export class PacienteResolver {
 
   @Mutation(() => Paciente)
   public async createPaciente(@Args('data') data: PacienteInput): Promise<Paciente> {
+    const existsPaciente = await this.repoService.pacienteRepo.findOne({ cpf: data.cpf })
+    
+    if (existsPaciente) {
+      throw new Error('CPF already exists.')
+    }
+    
     const paciente = this.repoService.pacienteRepo.create(data);
     await this.repoService.pacienteRepo.save(paciente);
-    // this.pubSub.publish('pacienteAdded', { pacienteAdded: paciente });
     return paciente;
+
   }
 
   @Mutation(() => Paciente)

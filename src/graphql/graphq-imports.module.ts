@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import HistoricoSinaisVitais from '../entities/historico-sinais-vitais.entity';
 import { EventoTipoResolver } from './evento-tipo/evento-tipo.resolver';
 import { EventoResolver } from './evento/evento.resolver';
 import { HospitalResolver } from './hospital/hospital.resolver';
@@ -16,6 +17,7 @@ import { PubSubModule } from './pubsub.module';
     EventoResolver,
     EventoTipoResolver,
     PacienteEventoResolver,
+    HistoricoSinaisVitais
   ],
   exports: [],
 })

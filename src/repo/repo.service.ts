@@ -7,6 +7,7 @@ import Hospital from '../entities/hospital.entity';
 import EventoTipo from '../entities/evento-tipo.entity';
 import Evento from '../entities/evento.entity';
 import PacienteEvento from '../entities/paciente-evento.entity';
+import HistoricoSinaisVitais from '../entities/historico-sinais-vitais.entity';
 
 
 @Injectable()
@@ -18,6 +19,7 @@ class RepoService {
     @InjectRepository(Hospital) public readonly hospitalRepo: Repository<Hospital>,
     @InjectRepository(EventoTipo) public readonly eventoTipoRepo: Repository<EventoTipo>,
     @InjectRepository(Evento) public readonly eventoRepo: Repository<Evento>,
+    @InjectRepository(HistoricoSinaisVitais) public readonly historicoSinaisVitaisRepo: Repository<HistoricoSinaisVitais>,
   ) {}
 }
 
