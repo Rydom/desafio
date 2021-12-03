@@ -2,13 +2,12 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Hospital from "./hospital.entity";
-import Internacao from "./internacao.entity";
 
 @ObjectType()
 @Entity({ name: 'leitos'})
 export default class Leito {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: number
 
   @Field()
@@ -16,8 +15,8 @@ export default class Leito {
   descricao: string;
   
   @Field(() => ID)
-  @Column()
-  hospitalId: number;
+  @Column({ name: 'hospital_id'})
+  hospitalId: string;
 
   @Field()
   @Column()
@@ -27,10 +26,4 @@ export default class Leito {
   @ManyToOne(() => Hospital, hospital => hospital.leitos)
   @JoinColumn({ name: 'hospital_id' })
   hospital: Promise<Hospital>
-
-  @Field(() => [Internacao])
-  @OneToMany(() => Internacao, internacao => internacao.leito, {
-    cascade: true,
-  })
-  internacoes: Promise<Internacao[]>
 }

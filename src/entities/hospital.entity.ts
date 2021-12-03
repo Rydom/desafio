@@ -7,8 +7,8 @@ import Leito from "./leito.entity";
 @Entity({ name: 'hospitais'})
 export default class Hospital {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
   @Field()
   @Column()
@@ -16,16 +16,9 @@ export default class Hospital {
 
   @Field()
   @Column()
-  cidade: string;
-
-  @Field()
-  @Column()
-  estado: string;
+  cep: string;
 
   @Field(() => [Leito])
-  @OneToMany(() => Leito, leito => leito.hospital, {
-    cascade: true,
-  })
+  @OneToMany(() => Leito, leito => leito.hospital) // Tinha essa config { cascade: true, }
   leitos: Promise<Leito[]>
-  // Array de leitos -> OneToMany
 }
