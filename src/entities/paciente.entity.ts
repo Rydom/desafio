@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import Exame from './exame.entity';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Leito from './leito.entity';
 
 export enum SexoRole {
@@ -48,11 +47,4 @@ export default class Paciente {
   @OneToOne(() => Leito, { eager: true })
   @JoinColumn({ name: 'leito_id'})
   leito: Leito;
-
-  // associations
-  @Field(() => [Exame])
-  @OneToMany(() => Exame, (exame) => exame.paciente, {
-    cascade: true,
-  })
-  exames: Promise<Exame[]>;
 }
