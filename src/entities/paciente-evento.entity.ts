@@ -29,4 +29,12 @@ export default class Leito {
   @JoinColumn({ name: 'evento_id'})
   evento: Evento
 
+  @Field(() => ID)
+  @Column({ name: 'leito_id' })
+  leitoId: string
+
+  @Field(() => Leito)
+  @ManyToOne(() => Leito, leito => leito.id)
+  @JoinColumn({ name: 'leito_id'})
+  leito: Leito
 }
