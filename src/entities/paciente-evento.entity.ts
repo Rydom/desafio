@@ -10,7 +10,7 @@ import Paciente from "./paciente.entity";
 export default class PacienteEvento {
   @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
-  id: number
+  id: string
 
   @Field(() => ID)
   @Column({ name: 'paciente_id' })
