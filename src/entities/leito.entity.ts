@@ -19,7 +19,9 @@ export default class Leito {
   hospitalId: string;
 
   @Field()
-  @Column()
+  @Column({
+    default: false
+  })
   ocupado: boolean;
   
   @Field(() => Hospital)

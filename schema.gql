@@ -2,13 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Exame {
-  id: ID!
-  nome: String!
-  pacienteId: ID!
-  paciente: Paciente!
-}
-
 type Hospital {
   id: ID!
   nome: String!
@@ -32,7 +25,6 @@ type Paciente {
   status: String!
   leitoId: ID!
   leito: Leito!
-  exames: [Exame!]!
 }
 
 """
@@ -47,25 +39,53 @@ enum SexoRole {
   OUTRO
 }
 
+type EventoTipo {
+  id: ID!
+  nome: String!
+}
+
 type Evento {
   id: ID!
   nome: String!
   data: DateTime!
+  eventoTipoId: ID!
 }
 
 type Query {
   getPacientes: [Paciente!]!
   getPaciente(id: String!): Paciente!
+  listHospitais: [Hospital!]!
+  getHospital(id: String!): Hospital!
+  listEventoTipo: [EventoTipo!]!
+  getEventoTipo(id: String!): EventoTipo!
 }
 
 type Mutation {
   createPaciente(data: PacienteInput!): Paciente!
   updatePaciente(data: PacienteInput!, id: String!): Paciente!
   deletePaciente(id: String!): Boolean!
+  createHospital(data: HospitalInput!): Hospital!
+  createLeito(data: LeitoInput!): Leito!
+  createEventoTipo(data: EventoTipoInput!): EventoTipo!
 }
 
 input PacienteInput {
   nome: String!
   nascimento: DateTime!
   sexo: String!
+}
+
+input HospitalInput {
+  nome: String!
+  cep: String!
+}
+
+input LeitoInput {
+  descricao: String!
+  hospitalId: String!
+  ocupado: Boolean = false
+}
+
+input EventoTipoInput {
+  nome: String!
 }

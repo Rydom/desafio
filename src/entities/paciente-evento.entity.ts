@@ -2,11 +2,12 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Evento from "./evento.entity";
+import Leito from "./leito.entity";
 import Paciente from "./paciente.entity";
 
 @ObjectType()
 @Entity({ name: 'paciente_evento'})
-export default class Leito {
+export default class PacienteEvento {
   @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
   id: number

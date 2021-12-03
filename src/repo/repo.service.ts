@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import Paciente from '../entities/paciente.entity';
 import Leito from '../entities/leito.entity';
 import Hospital from '../entities/hospital.entity';
-import Exame from '../entities/exame.entity';
+import EventoTipo from '../entities/evento-tipo.entity';
 
 
 @Injectable()
@@ -13,7 +13,7 @@ class RepoService {
     @InjectRepository(Paciente) public readonly pacienteRepo: Repository<Paciente>,
     @InjectRepository(Leito) public readonly leitoRepo: Repository<Leito>,
     @InjectRepository(Hospital) public readonly hospitalRepo: Repository<Hospital>,
-    @InjectRepository(Exame) public readonly exameRepo: Repository<Exame>,
+    @InjectRepository(EventoTipo) public readonly eventoTipoRepo: Repository<EventoTipo>,
   ) {}
 }
 
