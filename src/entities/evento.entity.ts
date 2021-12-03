@@ -16,7 +16,7 @@ export default class Evento {
 
   @Field()
   @Column()
-  data: Date[]
+  data: Date
  
   @Field(() => ID)
   @Column()
