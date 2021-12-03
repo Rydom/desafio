@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import Paciente from '../entities/paciente.entity';
 import Leito from '../entities/leito.entity';
 import Hospital from '../entities/hospital.entity';
-import Internacao from '../entities/internacao.entity';
 import Exame from '../entities/exame.entity';
 
 
@@ -14,7 +13,6 @@ class RepoService {
     @InjectRepository(Paciente) public readonly pacienteRepo: Repository<Paciente>,
     @InjectRepository(Leito) public readonly leitoRepo: Repository<Leito>,
     @InjectRepository(Hospital) public readonly hospitalRepo: Repository<Hospital>,
-    @InjectRepository(Internacao) public readonly internacaoRepo: Repository<Internacao>,
     @InjectRepository(Exame) public readonly exameRepo: Repository<Exame>,
   ) {}
 }
