@@ -18,7 +18,7 @@ export class PacienteResolver {
   }
 
   @Query(() => Paciente)
-  public async getPaciente(@Args('id') id: number): Promise<Paciente> {
+  public async getPaciente(@Args('id') id: string): Promise<Paciente> {
     return this.repoService.pacienteRepo.findOne(id);
   }
 
@@ -32,7 +32,7 @@ export class PacienteResolver {
 
   @Mutation(() => Paciente)
   public async updatePaciente(
-    @Args('id') id: number,
+    @Args('id') id: string,
     @Args('data') payload: PacienteInput,
   ) {
     let paciente: Promise<Paciente>;
@@ -47,7 +47,7 @@ export class PacienteResolver {
   }
 
   @Mutation(() => Boolean)
-  public async deletePaciente(@Args('id') id: number): Promise<boolean> {
+  public async deletePaciente(@Args('id') id: string): Promise<boolean> {
     return !!(await this.repoService.pacienteRepo.delete(id));
   }
 }

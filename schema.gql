@@ -12,8 +12,7 @@ type Exame {
 type Hospital {
   id: ID!
   nome: String!
-  cidade: String!
-  estado: String!
+  cep: String!
   leitos: [Leito!]!
 }
 
@@ -23,15 +22,6 @@ type Leito {
   hospitalId: ID!
   ocupado: Boolean!
   hospital: Hospital!
-  internacoes: [Internacao!]!
-}
-
-type Internacao {
-  id: ID!
-  pacienteId: ID!
-  leitoId: ID!
-  paciente: Paciente!
-  leito: Leito!
 }
 
 type Paciente {
@@ -39,7 +29,9 @@ type Paciente {
   nome: String!
   nascimento: DateTime!
   sexo: SexoRole!
-  internacoes: [Internacao!]!
+  status: String!
+  leitoId: ID!
+  leito: Leito!
   exames: [Exame!]!
 }
 
@@ -55,15 +47,21 @@ enum SexoRole {
   OUTRO
 }
 
+type Evento {
+  id: ID!
+  nome: String!
+  data: DateTime!
+}
+
 type Query {
   getPacientes: [Paciente!]!
-  getPaciente(id: Float!): Paciente!
+  getPaciente(id: String!): Paciente!
 }
 
 type Mutation {
   createPaciente(data: PacienteInput!): Paciente!
-  updatePaciente(data: PacienteInput!, id: Float!): Paciente!
-  deletePaciente(id: Float!): Boolean!
+  updatePaciente(data: PacienteInput!, id: String!): Paciente!
+  deletePaciente(id: String!): Boolean!
 }
 
 input PacienteInput {
