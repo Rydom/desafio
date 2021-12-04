@@ -5,8 +5,6 @@ Este projeto é uma API pública de gerenciamento de eventos hospitalares, utili
 
 A API tem como objetivo, receber eventos sobre pacientes de diversos hospitais, registrar estes eventos e retornar todos os eventos de cada paciente ordenados de forma cronologica, do mais antigo para o mais recente, em real-time, utilizando WebSockets.
 
-Após o processamento inicial, os eventos são enviados via MessageBroker (RabbitMQ), para ser persistido por uma aplicação terceira em um banco de dados dúravel.
-
 
 
 ## Tecnologias utilizadas
@@ -14,8 +12,6 @@ Após o processamento inicial, os eventos são enviados via MessageBroker (Rabbi
 **Server:** Node, GraphQL, WebSockets
 
 **Data Base:** PostgresSql
-
-**Message Broker:** RabbitMq
 
 
 ## Ferramentas
