@@ -44,7 +44,7 @@ export default class Paciente {
   leitoId?: string;
 
   @Field({ nullable: true })
-  @OneToOne(() => Leito, { eager: true, nullable: true })
+  @OneToOne(() => Leito, { nullable: true })
   @JoinColumn({ name: 'leito_id'})
   leito?: Leito;
 }
