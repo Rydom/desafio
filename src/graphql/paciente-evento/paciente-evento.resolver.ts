@@ -17,7 +17,9 @@ import { Inject } from '@nestjs/common';
 import { publishWsEvents } from '../evento/constants/publish-events.constants';
 import HistoricoSinaisVitais from '../../entities/historico-sinais-vitais.entity';
 import { HistoricoSinaisVitaisInput } from '../hospital-sinais-vitais/inputs/historico-sinais-vitais.input';
-import { PacienteEventoInput } from './paciente-evento.input';
+import { PacienteEventoInput } from './inputs/paciente-evento.input';
+import { pacienteEventoConstants } from './constants/paciente-evento.constants';
+import { MovimentacaoLeitoInput } from './inputs/movimentacao-leito.input';
 
 @Resolver(() => PacienteEvento)
 export class PacienteEventoResolver {
@@ -40,6 +42,12 @@ export class PacienteEventoResolver {
   public async internarPaciente(
     @Args('data') pacienteEventoInput: PacienteEventoInput,
   ): Promise<PacienteEvento> {
+    const paciente = await this.repoService.pacienteRepo.findOne(
+      pacienteEventoInput,
+    );
+    paciente.status = pacienteEventoConstants.INTERNADO;
+    await this.repoService.pacienteRepo.update(paciente.id, paciente);
+
     const pacienteEvento =
       this.repoService.pacienteEventoRepo.create(pacienteEventoInput);
     await this.repoService.pacienteEventoRepo.save(pacienteEvento);
@@ -78,14 +86,15 @@ export class PacienteEventoResolver {
 
   @Mutation(() => PacienteEvento)
   async coletarExamePaciente(
-    @Args('data') pacienteEventoInput: PacienteEventoInput
+    @Args('data') pacienteEventoInput: PacienteEventoInput,
   ): Promise<PacienteEvento> {
     // Hemograma e Glicemia em Jejum
-    const pacienteEvento = this.repoService.pacienteEventoRepo.create(pacienteEventoInput)
+    const pacienteEvento =
+      this.repoService.pacienteEventoRepo.create(pacienteEventoInput);
     await this.repoService.pacienteEventoRepo.save(pacienteEvento);
-    
+
     this.publishWebsocketEvent(
-      publishWsEvents.COLETA_SINAIS_VITAIS,
+      publishWsEvents.COLETA_EXAME_PACIENTE,
       pacienteEvento,
     );
 
@@ -94,56 +103,73 @@ export class PacienteEventoResolver {
 
   @Mutation(() => PacienteEvento)
   async movimentarLeito(
-    @Args('leitoAtual') leitoAtual: string,
-    @Args('novoLeito') novoLeito: string,
-    @Args('data') pacienteEventoInput: PacienteEventoInput,
+    @Args('data') movimentacaoLeitoInput: MovimentacaoLeitoInput,
   ): Promise<PacienteEvento> {
     //  Buscar paciente, Atualizar leito, criar evento.
-    const { pacienteId } = pacienteEventoInput
-    const paciente = await this.repoService.pacienteEventoRepo.findOne(pacienteId)
+    const { pacienteId, eventoId, novoLeito } = movimentacaoLeitoInput;
 
-    const leitoAntigo = await this.repoService.leitoRepo.findOne(leitoAtual)
+    const paciente = await this.repoService.pacienteRepo.findOne(
+      pacienteId,
+    );
+
+    const leitoAntigo = await this.repoService.leitoRepo.findOne(paciente.leitoId);
+
+    if (!leitoAntigo) {
+      throw new Error("O paciente não está em um leito.")
+    }
     // Desocupa o leito atual
-    leitoAntigo.ocupado = false
-    await this.repoService.leitoRepo.update(leitoAntigo.id, leitoAntigo)
-    
-    const atualizarLeito = await this.repoService.leitoRepo.findOne(novoLeito)
+    leitoAntigo.ocupado = false;
+    await this.repoService.leitoRepo.update(leitoAntigo.id, leitoAntigo);
 
-    paciente.leitoId = novoLeito
+    const atualizarLeito = await this.repoService.leitoRepo.findOne(novoLeito);
 
-    await this.repoService.pacienteRepo.update(paciente.id, paciente)
+    paciente.leitoId = novoLeito;
+
+    await this.repoService.pacienteRepo.update(paciente.id, paciente);
     // Ocupa o novo leito
-    atualizarLeito.ocupado = true
-    await this.repoService.leitoRepo.update(atualizarLeito.id, atualizarLeito)
+    atualizarLeito.ocupado = true;
+    await this.repoService.leitoRepo.update(atualizarLeito.id, atualizarLeito);
 
-    const pacienteEvento = this.repoService.pacienteEventoRepo.create(pacienteEventoInput);
-    pacienteEvento.leitoId = novoLeito;
-    await this.repoService.pacienteEventoRepo.save(pacienteEvento)
+    const pacienteEvento =
+      this.repoService.pacienteEventoRepo.create({
+        eventoId,
+        paciente,
+        leitoId: novoLeito
+      });
+    await this.repoService.pacienteEventoRepo.save(pacienteEvento);
 
     this.publishWebsocketEvent(
       publishWsEvents.MOVIMENTACAO_LEITO,
       pacienteEvento,
     );
 
-    return pacienteEvento
+    return pacienteEvento;
   }
 
   @Mutation(() => PacienteEvento)
   async concederAltaPaciente(
-    @Args('data') pacienteEventoInput: PacienteEventoInput
+    @Args('data') pacienteEventoInput: PacienteEventoInput,
   ): Promise<PacienteEvento> {
-    const pacienteEvento = this.repoService.pacienteEventoRepo.create(pacienteEventoInput)
+    const {pacienteId, leitoId} = pacienteEventoInput
+
+    const leito = await this.repoService.leitoRepo.findOne(leitoId)
+    const paciente = await this.repoService.pacienteRepo.findOne(
+      pacienteId,
+    );
+
+    paciente.status = pacienteEventoConstants.ALTA;
+    paciente.leitoId = null;
+    
+    leito.ocupado = false 
+
+    this.repoService.leitoRepo.update(leito.id, leito);
+    this.repoService.pacienteRepo.update(paciente.id, paciente);
+
+    const pacienteEvento =
+      this.repoService.pacienteEventoRepo.create(pacienteEventoInput);
     await this.repoService.pacienteEventoRepo.save(pacienteEvento);
 
-    const paciente = await this.repoService.pacienteRepo.findOne(pacienteEventoInput.pacienteId)
-    paciente.status = "Alta"
-    paciente.leitoId = null
-    await this.repoService.pacienteRepo.save(paciente)
-
-    this.publishWebsocketEvent(
-      publishWsEvents.ALTA_PACIENTE,
-      pacienteEvento,
-    );
+    this.publishWebsocketEvent(publishWsEvents.ALTA_PACIENTE, pacienteEvento);
 
     return pacienteEvento;
   }
@@ -158,12 +184,17 @@ export class PacienteEventoResolver {
     return this.pubSub.asyncIterator(publishWsEvents.COLETA_SINAIS_VITAIS);
   }
 
-  @Subscription(() => PacienteEvento )
+  @Subscription(() => PacienteEvento)
+  coletaExamePaciente() {
+    return this.pubSub.asyncIterator(publishWsEvents.COLETA_EXAME_PACIENTE);
+  }
+
+  @Subscription(() => PacienteEvento)
   movimentacaoLeito() {
     return this.pubSub.asyncIterator(publishWsEvents.MOVIMENTACAO_LEITO);
   }
 
-  @Subscription(() => PacienteEvento )
+  @Subscription(() => PacienteEvento)
   altaPaciente() {
     return this.pubSub.asyncIterator(publishWsEvents.ALTA_PACIENTE);
   }

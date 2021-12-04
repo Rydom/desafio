@@ -70,6 +70,8 @@ type Query {
   getPaciente(id: String!): Paciente!
   listHospitais: [Hospital!]!
   getHospital(id: String!): Hospital!
+  listLeitos: [Leito!]!
+  getLeito(id: String!): [Leito!]!
   listEventos: [Evento!]!
   getEvento(id: String!): Evento!
   listEventoTipo: [EventoTipo!]!
@@ -88,7 +90,9 @@ type Mutation {
   createEventoTipo(data: EventoTipoInput!): EventoTipo!
   internarPaciente(data: PacienteEventoInput!): PacienteEvento!
   coletarSinaisVitais(data: HistoricoSinaisVitaisInput!): HistoricoSinaisVitais!
-  movimentarLeito: PacienteEvento!
+  coletarExamePaciente(data: PacienteEventoInput!): PacienteEvento!
+  movimentarLeito(data: MovimentacaoLeitoInput!): PacienteEvento!
+  concederAltaPaciente(data: PacienteEventoInput!): PacienteEvento!
 }
 
 input PacienteInput {
@@ -137,7 +141,16 @@ input SinaisVitaisInput {
   pacienteId: String!
 }
 
+input MovimentacaoLeitoInput {
+  pacienteId: String!
+  eventoId: String!
+  novoLeito: String!
+}
+
 type Subscription {
   pacienteInternado: PacienteEvento!
   coletaSinaisVitais: HistoricoSinaisVitais!
+  coletaExamePaciente: PacienteEvento!
+  movimentacaoLeito: PacienteEvento!
+  altaPaciente: PacienteEvento!
 }

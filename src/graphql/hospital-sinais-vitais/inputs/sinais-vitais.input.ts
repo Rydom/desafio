@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql"
-import { PacienteEventoInput } from "../../paciente-evento/paciente-evento.input"
+import { PacienteEventoInput } from "../../paciente-evento/inputs/paciente-evento.input"
 
 
 @InputType()
